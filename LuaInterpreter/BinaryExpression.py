@@ -1,5 +1,7 @@
 from enum import Enum
 
+__author__ = "Steven Chaney"
+
 
 class ArithmeticOperator(Enum):
         ADD_OP = 0

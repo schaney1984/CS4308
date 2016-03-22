@@ -1,5 +1,7 @@
 from LuaInterpreter import BooleanExpression, Block
 
+__author__ = "Steven Chaney"
+
 
 class IfStatement(object):
 

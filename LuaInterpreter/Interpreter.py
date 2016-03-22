@@ -1,5 +1,7 @@
 from LuaInterpreter import Parser, Program, ParserException, LexicalException
 
+__author__ = "Steven Chaney"
+
 
 if __name__ == '__main__':
     try:

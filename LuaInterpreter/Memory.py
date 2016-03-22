@@ -1,8 +1,8 @@
-
+__author__ = "Steven Chaney"
 
 mem = [52]
 
-@staticmethod
+
 def store(ch, value):
     """
     :param ch: must be a letter
@@ -13,7 +13,6 @@ def store(ch, value):
     mem[indexOf(ch)] = value
 
 
-@staticmethod
 def indexOf(ch):
     """
     :param ch: must be a letter
@@ -29,6 +28,5 @@ def indexOf(ch):
     return index
 
 
-@staticmethod
 def fetch(ch):
     return mem[indexOf(ch)]

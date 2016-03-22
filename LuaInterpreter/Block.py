@@ -1,3 +1,6 @@
+__author__ = "Steven Chaney"
+
+
 class Block(object):
 
     def __init__(self):

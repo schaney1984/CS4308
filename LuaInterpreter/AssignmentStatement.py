@@ -1,5 +1,7 @@
 from LuaInterpreter import Memory, Id, ArithmeticExpression
 
+__author__ = "Steven Chaney"
+
 
 class AssignmentStatement(object):
     var = Id()

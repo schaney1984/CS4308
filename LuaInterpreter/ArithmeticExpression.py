@@ -1,5 +1,7 @@
 import abc
 
+__author__ = "Steven Chaney"
+
 
 class ArithmeticExpression(object):
     """

@@ -1,6 +1,8 @@
 from enum import Enum
 from LuaInterpreter import ArithmeticExpression
 
+__author__ = "Steven Chaney"
+
 
 class RelationalOperator(Enum):
     EQ_OP = 0

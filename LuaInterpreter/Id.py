@@ -1,5 +1,7 @@
 from LuaInterpreter import Memory
 
+__author__ = "Steven Chaney"
+
 
 class Id(object):
     def __init__(self, ch):
