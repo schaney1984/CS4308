@@ -8,10 +8,10 @@ if __name__ == '__main__':
         p = Parser.Parser("test4.lua")
         prog = p.parse()
         prog.execute()
-    except ParserException.ParserException as p:
-        print(p.getMessage())
-    except LexicalException.LexicalException as l:
-        print(l.getMessage())
+    except ParserException.ParserException:
+        print(ParserException.ParserException.args)
+    except LexicalException.LexicalException:
+        print(LexicalException.LexicalException.args)
     except ValueError:
         print(ValueError.args)
     except FileNotFoundError:
