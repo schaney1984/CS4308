@@ -27,7 +27,7 @@ class Parser(object):
         """
         tok = self.getNextToken()
         self.match(tok, TokenType.TokenType.FUNCTION_TOK)
-        functionName = self.getId()
+#        functionName = self.getId()
         tok = self.getNextToken()
         self.match(tok, TokenType.TokenType.LEFT_PAREN_TOK)
         tok = self.getNextToken()
@@ -73,8 +73,8 @@ class Parser(object):
         elif tok.getTokType() == TokenType.TokenType.ID_TOK:
             stmt = self.getAssignmentStatement()
         else:
-            raise ParserException.ParserException("invalid statement at row " + tok.getRowNumber() +
-                                                  " and column " + tok.getColumnNumber())
+            raise ParserException.ParserException("invalid statement at row " + str(tok.getRowNumber()) +
+                                                  " and column " + str(tok.getColumnNumber()))
         return stmt
 
     def getAssignmentStatement(self):
@@ -208,8 +208,8 @@ class Parser(object):
         elif tok.getTokType() == TokenType.TokenType.DIV_TOK:
             op = BinaryExpression.ArithmeticOperator.DIV_OP
         else:
-            raise ParserException.ParserException("arithmetic operator expected at row " + tok.getRowNumber() +
-                                                  " and column " + tok.getColumnNumber())
+            raise ParserException.ParserException("arithmetic operator expected at row " + str(tok.getRowNumber()) +
+                                                  " and column " + str(tok.getColumnNumber()))
         return op
 
     def getLiteralInteger(self):
@@ -219,13 +219,13 @@ class Parser(object):
         """
         tok = self.getNextToken()
         if tok.getTokType() is not TokenType.TokenType.LITERAL_INTEGER_TOK:
-            raise ParserException.ParserException("literal integer expected at row " + tok.getRowNumber() +
-                                                  " and column " + tok.getColumnNumber())
+            raise ParserException.ParserException("literal integer expected at row " + str(tok.getRowNumber()) +
+                                                  " and column " + str(tok.getColumnNumber()))
         value = 0
         try:
             value = int(tok.getLexeme())
         except ValueError:
-            print("ValueError: int expected at row " + tok.getRowNumber() + " and column " + tok.getColumnNumber())
+            print("ValueError: int expected at row " + str(tok.getRowNumber()) + " and column " + str(tok.getColumnNumber()))
         return LiteralInteger.LiteralInteger(value)
 
     def getId(self):
@@ -235,8 +235,8 @@ class Parser(object):
         """
         tok = self.getNextToken()
         if tok.getTokType is not TokenType.TokenType.ID_TOK:
-            raise ParserException.ParserException("identifier expected at row " + tok.getRowNumber() +
-                                                  " and column " + tok.getColumnNumber())
+            raise ParserException.ParserException("identifier expected at row " + str(tok.getRowNumber()) +
+                                                  " and column " + str(tok.getColumnNumber()))
         return Id.Id(tok.getLexeme()[0])
 
     def getBooleanExpression(self):
@@ -270,8 +270,8 @@ class Parser(object):
         elif tok.getTokType() == TokenType.TokenType.LE_OP:
             op = BooleanExpression.RelationalOperator.LE_OP
         else:
-            raise ParserException.ParserException("relational operator expected at row" + tok.getRowNumber() +
-                                                  " and column " + tok.getColumnNumber())
+            raise ParserException.ParserException("relational operator expected at row" + str(tok.getRowNumber()) +
+                                                  " and column " + str(tok.getColumnNumber()))
         return op
 
     def match(self, tok, tokType):
@@ -282,9 +282,9 @@ class Parser(object):
         """
         assert tok is not None
         assert tokType is not None
-        if tok.getTokType is not tokType:
-            raise ParserException.ParserException(tokType + " expected at row " + tok.getRowNumber() +
-                                                  " and column " + tok.getColumnNumber())
+        if tok.getTokType() is not tokType:
+            raise ParserException.ParserException(str(tokType) + " expected at row " + str(tok.getRowNumber()) +
+                                                  " and column " + str(tok.getColumnNumber()))
 
     def getLookaheadToken(self):
         """
@@ -293,7 +293,7 @@ class Parser(object):
         """
         try:
             tok = self.lex.getLookaheadToken()
-        except LexicalException:
+        except LexicalException.LexicalException:
             raise ParserException.ParserException("no more tokens")
         return tok
 
@@ -304,6 +304,6 @@ class Parser(object):
         """
         try:
             tok = self.lex.getNextToken()
-        except LexicalException:
+        except LexicalException.LexicalException:
             raise ParserException.ParserException("no more tokens")
         return tok

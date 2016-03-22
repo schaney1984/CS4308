@@ -2,9 +2,10 @@ from LuaInterpreter import Token, TokenType, LexicalException
 
 __author__ = "Steven Chaney"
 
+tokenList = []
+
 
 class LexicalAnalyzer(object):
-    tokenList = []
 
     def __init__(self, filename):
         """
@@ -16,15 +17,15 @@ class LexicalAnalyzer(object):
         if filename is None:
             raise ValueError("null file name argument")
         self.tokenList = []
-        lineNumber = 0
-        input = open(filename)
+        self.lineNumber = 0
+        self.input = open(filename)
 
-        for line in input:
-            lineNumber += 1
-            self.processLine(line, lineNumber)
+        for line in self.input:
+            self.lineNumber += 1
+            self.processLine(line, self.lineNumber)
 
-        input.close()
-        self.tokenList.append(Token.Token(TokenType.TokenType.EOS_TOK, "EOS", lineNumber, 1))
+        self.input.close()
+        self.tokenList.append(Token.Token(TokenType.TokenType.EOS_TOK, "EOS", self.lineNumber, 1))
 
     def processLine(self, line, lineNumber):
         """
@@ -172,4 +173,4 @@ class LexicalAnalyzer(object):
         """
         if not self.tokenList:
             raise LexicalException.LexicalException("no more tokens")
-        return self.tokenList.remove(0)
+        return self.tokenList.pop(0)

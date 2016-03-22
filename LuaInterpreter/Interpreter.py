@@ -1,20 +1,29 @@
 from LuaInterpreter import Parser, ParserException, LexicalException
+import traceback
 
 __author__ = "Steven Chaney"
 
 
 if __name__ == '__main__':
     try:
-        p = Parser.Parser("test4.lua")
+        p = Parser.Parser("test3.lua")
         prog = p.parse()
         prog.execute()
-    except ParserException.ParserException:
-        print(ParserException.ParserException.args)
-    except LexicalException.LexicalException:
-        print(LexicalException.LexicalException.args)
-    except ValueError:
-        print(ValueError.args)
+    except ParserException.ParserException as p:
+        print(p)
+        # print("ParserException")
+        traceback.print_exc()
+    except LexicalException.LexicalException as l:
+        print(l)
+        # print("LexicalException")
+        traceback.print_exc()
+    except ValueError as v:
+        print(v)
+        # print("ValueError")
+        traceback.print_exc()
     except FileNotFoundError:
         print("source file is not found")
-    except Exception:
-        print("unknown error occurred -- terminating")
+        traceback.print_exc()
+    except Exception as e:
+        print(e)
+        traceback.print_exc()
