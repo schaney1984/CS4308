@@ -13,7 +13,7 @@ class Block(object):
         """
         if stmt is None:
             raise ValueError("null statement argument")
-        self.stmts.append(self, stmt)
+        self.stmts.append(stmt)
 
     def execute(self):
         for stmt in self.stmts:

@@ -1,13 +1,7 @@
-from LuaInterpreter import BooleanExpression, Block
-
 __author__ = "Steven Chaney"
 
 
 class IfStatement(object):
-
-    expr = BooleanExpression()
-    blk1 = Block()
-    blk2 = Block()
 
     def __init__(self, expr, blk1, blk2):
         """

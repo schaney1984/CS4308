@@ -4,8 +4,6 @@ __author__ = "Steven Chaney"
 
 
 class AssignmentStatement(object):
-    var = Id()
-    expr = ArithmeticExpression()
 
     def __init__(self, var, expr):
         """

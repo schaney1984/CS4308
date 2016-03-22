@@ -1,5 +1,4 @@
 from enum import Enum
-from LuaInterpreter import ArithmeticExpression
 
 __author__ = "Steven Chaney"
 
@@ -14,9 +13,6 @@ class RelationalOperator(Enum):
 
 
 class BooleanExpression(object):
-    op = RelationalOperator()
-    expr1 = ArithmeticExpression()
-    expr2 = ArithmeticExpression()
 
     def __init__(self, op, expr1, expr2):
         """

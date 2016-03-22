@@ -1,15 +1,15 @@
-from LuaInterpreter import LexicalAnalyzer, LexicalException, ParserException, TokenType, BooleanExpression, Id,\
-     LiteralInteger, BinaryExpression, IfStatement, WhileStatement, PrintStatement, RepeatStatement, Statement, Token,\
-     AssignmentStatement, Block, Program
+from LuaInterpreter import LexicalAnalyzer, LexicalException, ParserException, TokenType, BooleanExpression, Id, \
+    LiteralInteger, BinaryExpression, IfStatement, WhileStatement, PrintStatement, RepeatStatement, \
+    AssignmentStatement, Block, Program
 
 __author__ = "Steven Chaney"
+
 
 # Parser class implements a recursive descent parsing algorithm
 # for the given g rammar of a subset of Lua
 
 
 class Parser(object):
-
     def __init__(self, filename):
         """
         :param filename:  cannot be null - checked in LexicalAnalyzer
@@ -17,7 +17,7 @@ class Parser(object):
         :raises: LexicalException
         :postcondition: parser object has been created
         """
-        self.lex = LexicalAnalyzer(filename)
+        self.lex = LexicalAnalyzer.LexicalAnalyzer(filename)
 
     def parse(self):
         """
@@ -26,19 +26,19 @@ class Parser(object):
         implements the production <program> -> function id() <block> end
         """
         tok = self.getNextToken()
-        self.match(tok, TokenType.FUNCTION_TOK)
+        self.match(tok, TokenType.TokenType.FUNCTION_TOK)
         functionName = self.getId()
         tok = self.getNextToken()
-        self.match(tok, TokenType.LEFT_PAREN_TOK)
+        self.match(tok, TokenType.TokenType.LEFT_PAREN_TOK)
         tok = self.getNextToken()
-        self.match(tok, TokenType.RIGHT_PAREN_TOK)
+        self.match(tok, TokenType.TokenType.RIGHT_PAREN_TOK)
         blk = self.getBlock()
         tok = self.getNextToken()
-        self.match(tok, TokenType.END_TOK)
+        self.match(tok, TokenType.TokenType.END_TOK)
         tok = self.getNextToken()
-        if tok.getTokType() is not TokenType.EOS_TOK:
-            raise ParserException("garbage at end of file")
-        return Program(blk)
+        if tok.getTokType() is not TokenType.TokenType.EOS_TOK:
+            raise ParserException.ParserException("garbage at end of file")
+        return Program.Program(blk)
 
     def getBlock(self):
         """
@@ -46,7 +46,7 @@ class Parser(object):
         :raises: ParserException if a parsing error occurred
         implements the production <block> -> <statement> | <statement> <block>
         """
-        blk = Block()
+        blk = Block.Block()
         tok = self.getLookaheadToken()
         while self.isValidStartOfStatement(tok):
             stmt = self.getStatement()
@@ -62,19 +62,19 @@ class Parser(object):
                                                 | <print_statement> | <repeat statement>
         """
         tok = self.getLookaheadToken()
-        if tok.getTokType() == TokenType.IF_TOK:
+        if tok.getTokType() == TokenType.TokenType.IF_TOK:
             stmt = self.getIfStatement()
-        elif tok.getTokType() == TokenType.WHILE_TOK:
+        elif tok.getTokType() == TokenType.TokenType.WHILE_TOK:
             stmt = self.getWhileStatement()
-        elif tok.getTokType() == TokenType.PRINT_TOK:
+        elif tok.getTokType() == TokenType.TokenType.PRINT_TOK:
             stmt = self.getPrintStatement()
-        elif tok.getTokType() == TokenType.REPEAT_TOK:
+        elif tok.getTokType() == TokenType.TokenType.REPEAT_TOK:
             stmt = self.getRepeatStatement()
-        elif tok.getTokType() == TokenType.ID_TOK:
+        elif tok.getTokType() == TokenType.TokenType.ID_TOK:
             stmt = self.getAssignmentStatement()
         else:
-            raise ParserException("invalid statement at row " + tok.getRowNumber() +
-                                  " and column " + tok.getColumnNumber())
+            raise ParserException.ParserException("invalid statement at row " + tok.getRowNumber() +
+                                                  " and column " + tok.getColumnNumber())
         return stmt
 
     def getAssignmentStatement(self):
@@ -85,9 +85,9 @@ class Parser(object):
         """
         var = self.getId()
         tok = self.getNextToken()
-        self.match(tok, TokenType.ASSIGN_TOK)
+        self.match(tok, TokenType.TokenType.ASSIGN_TOK)
         expr = self.getArithmeticExpression()
-        return AssignmentStatement(var, expr)
+        return AssignmentStatement.AssignmentStatement(var, expr)
 
     def getRepeatStatement(self):
         """
@@ -96,12 +96,12 @@ class Parser(object):
         implements the production <repeat_statement> -> repeat <block> until <boolean_expression>
         """
         tok = self.getNextToken()
-        self.match(tok, TokenType.REPEAT_TOK)
+        self.match(tok, TokenType.TokenType.REPEAT_TOK)
         blk = self.getBlock()
         tok = self.getNextToken()
-        self.match(tok, TokenType.UNTIL_TOK)
+        self.match(tok, TokenType.TokenType.UNTIL_TOK)
         expr = self.getBooleanExpression()
-        return RepeatStatement(blk, expr)
+        return RepeatStatement.RepeatStatement(blk, expr)
 
     def getPrintStatement(self):
         """
@@ -110,13 +110,13 @@ class Parser(object):
         implements the production <print_statement> -> print ( <arithmetic_expression )
         """
         tok = self.getNextToken()
-        self.match(tok, TokenType.PRINT_TOK)
+        self.match(tok, TokenType.TokenType.PRINT_TOK)
         tok = self.getNextToken()
-        self.match(tok, TokenType.LEFT_PAREN_TOK)
+        self.match(tok, TokenType.TokenType.LEFT_PAREN_TOK)
         expr = self.getArithmeticExpression()
         tok = self.getNextToken()
-        self.match(tok, TokenType.RIGHT_PAREN_TOK)
-        return PrintStatement(expr)
+        self.match(tok, TokenType.TokenType.RIGHT_PAREN_TOK)
+        return PrintStatement.PrintStatement(expr)
 
     def getWhileStatement(self):
         """
@@ -125,14 +125,14 @@ class Parser(object):
         implements the production <while_statement> -> while <boolean_expression> do <block> end
         """
         tok = self.getNextToken()
-        self.match(tok, TokenType.WHILE_TOK)
+        self.match(tok, TokenType.TokenType.WHILE_TOK)
         expr = self.getBooleanExpression()
         tok = self.getNextToken()
-        self.match(tok, TokenType.DO_TOK)
+        self.match(tok, TokenType.TokenType.DO_TOK)
         blk = self.getBlock()
         tok = self.getNextToken()
-        self.match(tok, TokenType.END_TOK)
-        return WhileStatement(expr, blk)
+        self.match(tok, TokenType.TokenType.END_TOK)
+        return WhileStatement.WhileStatement(expr, blk)
 
     def getIfStatement(self):
         """
@@ -141,17 +141,17 @@ class Parser(object):
         implements the production <if_statement> -> if <boolean_expression> then <block> else <block> end
         """
         tok = self.getNextToken()
-        self.match(tok, TokenType.IF_TOK)
+        self.match(tok, TokenType.TokenType.IF_TOK)
         expr = self.getBooleanExpression()
         tok = self.getNextToken()
-        self.match(tok, TokenType.THEN_TOK)
+        self.match(tok, TokenType.TokenType.THEN_TOK)
         blk1 = self.getBlock()
         tok = self.getNextToken()
-        self.match(tok, TokenType.ELSE_TOK)
+        self.match(tok, TokenType.TokenType.ELSE_TOK)
         blk2 = self.getBlock()
         tok = self.getNextToken()
-        self.match(tok, TokenType.END_TOK)
-        return IfStatement(expr, blk1, blk2)
+        self.match(tok, TokenType.TokenType.END_TOK)
+        return IfStatement.IfStatement(expr, blk1, blk2)
 
     def isValidStartOfStatement(self, tok):
         """
@@ -159,11 +159,11 @@ class Parser(object):
         :return: whether tok can be the start of a statement
         """
         assert tok is not None
-        return tok.getTokType() == TokenType.ID_TOK or\
-            tok.getTokType() == TokenType.IF_TOK or\
-            tok.getTokType() == TokenType.WHILE_TOK or\
-            tok.getTokType() == TokenType.PRINT_TOK or\
-            tok.getTokType() == TokenType.REPEAT_TOK
+        return tok.getTokType() == TokenType.TokenType.ID_TOK or \
+               tok.getTokType() == TokenType.TokenType.IF_TOK or \
+               tok.getTokType() == TokenType.TokenType.WHILE_TOK or \
+               tok.getTokType() == TokenType.TokenType.PRINT_TOK or \
+               tok.getTokType() == TokenType.TokenType.REPEAT_TOK
 
     def getArithmeticExpression(self):
         """
@@ -173,9 +173,9 @@ class Parser(object):
                                     | <arithmetic_op> <arithmetic_expression> <arithmetic_expression>
         """
         tok = self.getLookaheadToken()
-        if tok.getTokType() == TokenType.ID_TOK:
+        if tok.getTokType() == TokenType.TokenType.ID_TOK:
             expr = self.getId()
-        elif tok.getTokType() == TokenType.LITERAL_INTEGER_TOK:
+        elif tok.getTokType() == TokenType.TokenType.LITERAL_INTEGER_TOK:
             expr = self.getLiteralInteger()
         else:
             expr = self.getBinaryExpression()
@@ -190,7 +190,7 @@ class Parser(object):
         op = self.getArithmeticOperator()
         expr1 = self.getArithmeticExpression()
         expr2 = self.getArithmeticExpression()
-        return BinaryExpression(op, expr1, expr2)
+        return BinaryExpression.BinaryExpression(op, expr1, expr2)
 
     def getArithmeticOperator(self):
         """
@@ -199,17 +199,17 @@ class Parser(object):
         implements the production <arithmetic_op> -> add_operator | sub_operator | mul_operator | div_operator
         """
         tok = self.getNextToken()
-        if tok.getTokType() == TokenType.ADD_TOK:
+        if tok.getTokType() == TokenType.TokenType.ADD_TOK:
             op = BinaryExpression.ArithmeticOperator.ADD_OP
-        elif tok.getTokType() == TokenType.SUB_TOK:
+        elif tok.getTokType() == TokenType.TokenType.SUB_TOK:
             op = BinaryExpression.ArithmeticOperator.SUB_OP
-        elif tok.getTokType() == TokenType.MUL_TOK:
+        elif tok.getTokType() == TokenType.TokenType.MUL_TOK:
             op = BinaryExpression.ArithmeticOperator.MUL_OP
-        elif tok.getTokType() == TokenType.DIV_TOK:
+        elif tok.getTokType() == TokenType.TokenType.DIV_TOK:
             op = BinaryExpression.ArithmeticOperator.DIV_OP
         else:
-            raise ParserException("arithmetic operator expected at row " + tok.getRowNumber() +
-                                  " and column " + tok.getColumnNumber())
+            raise ParserException.ParserException("arithmetic operator expected at row " + tok.getRowNumber() +
+                                                  " and column " + tok.getColumnNumber())
         return op
 
     def getLiteralInteger(self):
@@ -218,14 +218,15 @@ class Parser(object):
         :raises: ParserException if a parsing error occurred
         """
         tok = self.getNextToken()
-        if tok.getTokType() is not TokenType.LITERAL_INTEGER_TOK:
-            raise ParserException("literal integer expected at row " + tok.getRowNumber() +
-                                  " and column " + tok.getColumnNumber())
+        if tok.getTokType() is not TokenType.TokenType.LITERAL_INTEGER_TOK:
+            raise ParserException.ParserException("literal integer expected at row " + tok.getRowNumber() +
+                                                  " and column " + tok.getColumnNumber())
+        value = 0
         try:
             value = int(tok.getLexeme())
         except ValueError:
             print("ValueError: int expected at row " + tok.getRowNumber() + " and column " + tok.getColumnNumber())
-        return LiteralInteger(value)
+        return LiteralInteger.LiteralInteger(value)
 
     def getId(self):
         """
@@ -233,10 +234,10 @@ class Parser(object):
         :raises: ParserException if a parsing error occurred
         """
         tok = self.getNextToken()
-        if tok.getTokType is not TokenType.ID_TOK:
-            raise ParserException("identifier expected at row " + tok.getRowNumber() +
-                                  " and column " + tok.getColumnNumber())
-        return Id(tok.getLexeme()[0])
+        if tok.getTokType is not TokenType.TokenType.ID_TOK:
+            raise ParserException.ParserException("identifier expected at row " + tok.getRowNumber() +
+                                                  " and column " + tok.getColumnNumber())
+        return Id.Id(tok.getLexeme()[0])
 
     def getBooleanExpression(self):
         """
@@ -247,7 +248,7 @@ class Parser(object):
         op = self.getRelationalOperator()
         expr1 = self.getArithmeticExpression()
         expr2 = self.getArithmeticExpression()
-        return BooleanExpression(op, expr1, expr2)
+        return BooleanExpression.BooleanExpression(op, expr1, expr2)
 
     def getRelationalOperator(self):
         """
@@ -256,21 +257,21 @@ class Parser(object):
         implements the production <relative_op> → le_operator | lt_operator | ge_operator | gt_operator | eq_operator | ne_operator
         """
         tok = self.getNextToken()
-        if tok.getTokType() == TokenType.EQ_TOK:
+        if tok.getTokType() == TokenType.TokenType.EQ_TOK:
             op = BooleanExpression.RelationalOperator.EQ_OP
-        elif tok.getTokType() == TokenType.NE_TOK:
+        elif tok.getTokType() == TokenType.TokenType.NE_TOK:
             op = BooleanExpression.RelationalOperator.NE_OP
-        elif tok.getTokType() == TokenType.GT_OP:
+        elif tok.getTokType() == TokenType.TokenType.GT_OP:
             op = BooleanExpression.RelationalOperator.GT_OP
-        elif tok.getTokType() == TokenType.GE_OP:
+        elif tok.getTokType() == TokenType.TokenType.GE_OP:
             op = BooleanExpression.RelationalOperator.GE_OP
-        elif tok.getTokType() == TokenType.LT_OP:
+        elif tok.getTokType() == TokenType.TokenType.LT_OP:
             op = BooleanExpression.RelationalOperator.LT_OP
-        elif tok.getTokType() == TokenType.LE_OP:
+        elif tok.getTokType() == TokenType.TokenType.LE_OP:
             op = BooleanExpression.RelationalOperator.LE_OP
         else:
-            raise ParserException("relational operator expected at row" + tok.getRowNumber() +
-                                  " and column " + tok.getColumnNumber())
+            raise ParserException.ParserException("relational operator expected at row" + tok.getRowNumber() +
+                                                  " and column " + tok.getColumnNumber())
         return op
 
     def match(self, tok, tokType):
@@ -282,9 +283,8 @@ class Parser(object):
         assert tok is not None
         assert tokType is not None
         if tok.getTokType is not tokType:
-            raise ParserException(tokType + " expected at row " + tok.getRowNumber() +
-                                  " and column " + tok.getColumnNumber())
-
+            raise ParserException.ParserException(tokType + " expected at row " + tok.getRowNumber() +
+                                                  " and column " + tok.getColumnNumber())
 
     def getLookaheadToken(self):
         """
@@ -294,7 +294,7 @@ class Parser(object):
         try:
             tok = self.lex.getLookaheadToken()
         except LexicalException:
-            raise ParserException("no more tokens")
+            raise ParserException.ParserException("no more tokens")
         return tok
 
     def getNextToken(self):
@@ -305,5 +305,5 @@ class Parser(object):
         try:
             tok = self.lex.getNextToken()
         except LexicalException:
-            raise ParserException("no more tokens")
+            raise ParserException.ParserException("no more tokens")
         return tok

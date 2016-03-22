@@ -22,9 +22,9 @@ def indexOf(ch):
     if not ch.isAlpha():
         raise ValueError("invalid identifier argument")
     if ch.isLower():
-        index = ch - 'a'
+        index = int(ch) - int('a')
     else:
-        index = 26 + ch - 'A'
+        index = 26 + int(ch) - int('A')
     return index
 
 
